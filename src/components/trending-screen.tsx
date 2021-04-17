@@ -8,7 +8,7 @@ import { Trending } from "imdb-crawler-api/src/data/objects";
 import { useIntervalEffect } from "../hooks/use-interval-effect";
 
 
-export function TrendingPage() {
+export function TrendingScreen() {
   const [search, setSearch] = useState('');
   const [trending, setTrending] = useState<Trending[]>([]);
   const [filter, setFilter] = useState<Trending[]>([]);
@@ -17,7 +17,6 @@ export function TrendingPage() {
     getTrending().then((data: Trending[]) => {
       setTrending(data);
       updateSearch(search);
-      console.log('fetch')
     }).catch(() => {
       setTrending([]);
     });
