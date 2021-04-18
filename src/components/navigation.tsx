@@ -9,6 +9,8 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 
 import { HomeScreen } from './home-screen';
 import { TrendingScreen } from './trending-screen';
+import { WatchableScreen } from './watchable-screen';
+
 import { mainColor, secondaryColor } from './common-styles/colors';
 
 
@@ -21,6 +23,7 @@ export function Navigation() {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen name='TabNavigation' component={TabNavigation} options={{ headerShown: false }} />
+          <Stack.Screen name='Watchable' component={WatchableScreen} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaView>
@@ -29,21 +32,21 @@ export function Navigation() {
 
 function TabNavigation() {
   return (
-        <Tab.Navigator
-          screenOptions={({ route }) => ({
-            tabBarIcon: ({ focused, color, size }) => {
-              const iconName = focused ? icons[route.name] : icons[route.name] + '-outline';
-              return <Ionicons name={iconName} size={size} color={color} />;
-            },
-          })}
-          tabBarOptions={{
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused, color, size }) => {
+          const iconName = focused ? icons[route.name] : icons[route.name] + '-outline';
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+      })}
+      tabBarOptions={{
         activeTintColor: mainColor,
         inactiveTintColor: secondaryColor,
-          }}
-        >
+      }}
+    >
       <Tab.Screen name='Home' component={HomeScreen} />
       <Tab.Screen name='Trending' component={TrendingScreen} />
-        </Tab.Navigator>
+    </Tab.Navigator>
   )
 }
 

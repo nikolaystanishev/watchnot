@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { FlatList } from "react-native";
 import { SearchBar, ListItem, Avatar } from "react-native-elements";
 
+import { useNavigation } from "@react-navigation/native";
+
+
 import { getTrending } from 'imdb-crawler-api';
 import { Trending } from "imdb-crawler-api/src/data/objects";
 import { LoaderScreen } from "./common/loader-screen";
@@ -52,8 +55,14 @@ export function TrendingScreen() {
 
 
 function ListElement(props: { trending: Trending }) {
+  const navigation = useNavigation();
+
+  const openWatchable = () => {
+    navigation.navigate('Watchable', { id: props.trending.id });
+  }
+
   return (
-    <ListItem bottomDivider>
+    <ListItem bottomDivider onPress={openWatchable}>
       <Avatar source={{ uri: props.trending.poster }} />
       <ListItem.Content>
         <ListItem.Title>{props.trending.name}</ListItem.Title>
