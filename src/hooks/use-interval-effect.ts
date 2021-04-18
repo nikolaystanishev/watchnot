@@ -3,7 +3,6 @@ import { useEffect, useRef } from "react";
 
 export function useIntervalEffect(callback: Function, delay?: number | null) {
   const savedCallback = useRef<Function>();
-  const shouldFetchFirst = useRef<number>(0);
 
   useEffect(() => {
     savedCallback.current = callback;
@@ -13,13 +12,6 @@ export function useIntervalEffect(callback: Function, delay?: number | null) {
   useEffect(() => {
     function tick() {
       savedCallback.current && savedCallback.current();
-    }
-
-    if (shouldFetchFirst.current <= 1) {
-      tick();
-      return () => {
-        shouldFetchFirst.current++;
-      };
     }
 
     if (delay != null) {

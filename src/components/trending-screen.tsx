@@ -1,36 +1,42 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList } from "react-native";
 import { SearchBar, ListItem, Avatar } from "react-native-elements";
 
 import { getTrending } from 'imdb-crawler-api';
 import { Trending } from "imdb-crawler-api/src/data/objects";
+import { LoaderScreen } from "./common/loader-screen";
 
 import { useIntervalEffect } from "../hooks/use-interval-effect";
 
 
 export function TrendingScreen() {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState<string>('');
   const [trending, setTrending] = useState<Trending[]>([]);
   const [filter, setFilter] = useState<Trending[]>([]);
 
-  const fetchData = () => {
+  const fetchData = async () => {
     getTrending().then((data: Trending[]) => {
       setTrending(data);
-      updateSearch(search);
     }).catch(() => {
-      setTrending([]);
+      console.log('error');
     });
   }
 
   useIntervalEffect(fetchData, 1000 * 60 * 5);
 
+  useEffect(() => {
+    updateSearch(search);
+  }, [trending]);
+
   function updateSearch(searchValue?: string) {
-    setSearch(searchValue ? searchValue.toLowerCase() : '');
-    setFilter(trending.filter((t: Trending) => t.name.toLowerCase().includes(search)));
+    const searchQuery: string = searchValue ? searchValue.toLowerCase() : '';
+    setFilter(trending.filter((t: Trending) => t.name.toLowerCase().includes(searchQuery)));
+    setSearch(searchQuery);
   };
 
   return (
     <>
+      <LoaderScreen fetchData={fetchData} isReady={trending.length != 0 && filter.length != 0} />
       <SearchBar
         placeholder="Search Movies"
         onChangeText={updateSearch}
