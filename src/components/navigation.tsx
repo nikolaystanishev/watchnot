@@ -11,6 +11,7 @@ import { HomeScreen } from './home-screen';
 import { TrendingScreen } from './trending-screen';
 import { WatchableScreen } from './watchable-screen';
 import { ImageScreen } from './common/image-screen';
+import { ActorScreen } from './actor-screen';
 
 import { mainColor, secondaryColor } from './common-styles/colors';
 
@@ -25,6 +26,7 @@ export function Navigation() {
         <Stack.Navigator>
           <Stack.Screen name='TabNavigation' component={TabNavigation} options={{ headerShown: false }} />
           <Stack.Screen name='Watchable' component={WatchableScreen} options={{ headerShown: false }} />
+          <Stack.Screen name='Actor' component={ActorScreen} options={{ headerShown: false }} />
           <Stack.Screen name='Image' component={ImageScreen} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
