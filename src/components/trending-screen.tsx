@@ -6,10 +6,11 @@ import { useNavigation } from "@react-navigation/native";
 
 
 import { getTrending } from 'imdb-crawler-api';
-import { Trending } from "imdb-crawler-api/src/data/objects";
-import { LoaderScreen } from "./common/loader-screen";
+import { Trending } from "imdb-crawler-api/src/trending";
 
+import { LoaderScreen } from "./common/loader-screen";
 import { useIntervalEffect } from "../hooks/use-interval-effect";
+
 
 
 export function TrendingScreen() {

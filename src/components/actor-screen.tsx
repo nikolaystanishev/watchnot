@@ -4,8 +4,8 @@ import { Avatar, Card } from 'react-native-elements';
 
 import { useNavigation } from '@react-navigation/native';
 
-import { Actor } from 'imdb-crawler-api/src/data/objects';
 import { getActor } from 'imdb-crawler-api';
+import { Actor } from 'imdb-crawler-api/src/actor';
 
 import { LoaderScreen } from './common/loader-screen';
 import { commonStyles } from './common-styles/styles';
@@ -43,7 +43,7 @@ export function ActorScreen(props: { route: { params: { id: string } } }) {
           <Card.Divider />
           <Card.Title>{actor?.name}</Card.Title>
           <View style={commonStyles.centerText}>
-            <Card.FeaturedTitle>{actor?.actorBirth}</Card.FeaturedTitle>
+            <Card.FeaturedTitle>{actor?.birth}</Card.FeaturedTitle>
             <Card.FeaturedTitle>{actor?.bornInfo}</Card.FeaturedTitle>
           </View>
           <Card.FeaturedSubtitle>{actor?.info}</Card.FeaturedSubtitle>

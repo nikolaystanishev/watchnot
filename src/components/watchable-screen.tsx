@@ -6,7 +6,7 @@ import { FlatList } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 
 import { getWatchable } from 'imdb-crawler-api';
-import { Watchable, SimiliarWatchable, WatchableActor } from 'imdb-crawler-api/src/data/objects';
+import { SimiliarWatchable, Watchable, WatchableActor } from 'imdb-crawler-api/src/watchable';
 
 import { LoaderScreen } from './common/loader-screen';
 import { commonStyles } from './common-styles/styles';
