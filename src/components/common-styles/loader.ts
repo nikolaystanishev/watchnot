@@ -1,1 +1,1 @@
-export const loader = require('../../../assets/loader.json');
+export const loader: string = require('../../../assets/loader.json');

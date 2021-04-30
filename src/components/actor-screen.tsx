@@ -7,8 +7,9 @@ import { useNavigation } from '@react-navigation/native';
 import { getActor } from 'imdb-crawler-api';
 import { Actor } from 'imdb-crawler-api/src/actor';
 
-import { LoaderScreen } from './common/loader-screen';
-import { commonStyles } from './common-styles/styles';
+import { LoaderAnimation } from './common/loader-animation';
+import { cardStyles } from './common-styles/styles';
+import { ScreenAnimatedLoader } from './common/loader-screen';
 
 
 export function ActorScreen(props: { route: { params: { id: string } } }) {
@@ -29,10 +30,10 @@ export function ActorScreen(props: { route: { params: { id: string } } }) {
 
   return (
     <>
-      <LoaderScreen fetchData={fetchData} isReady={actor != null} />
+      <LoaderAnimation fetchData={fetchData} isReady={actor != null} loaderComponent={ScreenAnimatedLoader} />
       <ScrollView>
-        <Card containerStyle={commonStyles.card} >
-          <View style={commonStyles.poster}>
+        <Card containerStyle={cardStyles.card} >
+          <View style={cardStyles.poster}>
             <Avatar
               rounded
               size="xlarge"
@@ -42,7 +43,7 @@ export function ActorScreen(props: { route: { params: { id: string } } }) {
           </View>
           <Card.Divider />
           <Card.Title>{actor?.name}</Card.Title>
-          <View style={commonStyles.centerText}>
+          <View style={cardStyles.centerText}>
             <Card.FeaturedTitle>{actor?.birth}</Card.FeaturedTitle>
             <Card.FeaturedTitle>{actor?.bornInfo}</Card.FeaturedTitle>
           </View>

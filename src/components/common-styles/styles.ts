@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 
 
-export const commonStyles = StyleSheet.create({
+export const cardStyles = StyleSheet.create({
   card: {
     marginBottom: 15
   },
@@ -11,5 +11,13 @@ export const commonStyles = StyleSheet.create({
   },
   centerText: {
     alignItems: "center"
+  }
+});
+
+
+export const animationStyles = StyleSheet.create({
+  lottie: {
+    width: 100,
+    height: 100
   }
 });

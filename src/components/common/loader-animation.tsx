@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet } from 'react-native';
 
 import AppLoading from 'expo-app-loading'
-import AnimatedLoader from 'react-native-animated-loader';
 
 import { loader } from '../common-styles/loader';
+import { ComponentAnimatedLoader } from './loader-component';
+import { ScreenAnimatedLoader } from './loader-screen';
+import { animationStyles } from '../common-styles/styles';
 
 
-export function LoaderScreen(props: { fetchData: () => Promise<void>, isReady: boolean }) {
+export function LoaderAnimation(props: { fetchData: () => Promise<void>, isReady: boolean, loaderComponent: typeof ComponentAnimatedLoader | typeof ScreenAnimatedLoader }) {
   const [stopLoading, setStopLoading] = useState<boolean>(props.isReady);
 
   useEffect(() => {
@@ -21,20 +22,13 @@ export function LoaderScreen(props: { fetchData: () => Promise<void>, isReady: b
         startAsync={props.fetchData}
         onFinish={() => { }}
         onError={() => { }} />
-      <AnimatedLoader
+      <props.loaderComponent
         visible={!stopLoading}
         overlayColor='rgba(255,255,255,0.75)'
         source={loader}
-        animationStyle={styles.lottie}
+        animationStyle={animationStyles.lottie}
         speed={1}
       />
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  lottie: {
-    width: 100,
-    height: 100
-  }
-});

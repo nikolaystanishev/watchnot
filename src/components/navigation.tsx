@@ -66,4 +66,3 @@ const styles = StyleSheet.create({
     paddingTop: StatusBar.currentHeight,
   },
 });
-

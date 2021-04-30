@@ -8,8 +8,9 @@ import { useNavigation } from '@react-navigation/native';
 import { getWatchable } from 'imdb-crawler-api';
 import { SimiliarWatchable, Watchable, WatchableActor } from 'imdb-crawler-api/src/watchable';
 
-import { LoaderScreen } from './common/loader-screen';
-import { commonStyles } from './common-styles/styles';
+import { LoaderAnimation } from './common/loader-animation';
+import { cardStyles } from './common-styles/styles';
+import { ScreenAnimatedLoader } from './common/loader-screen';
 
 
 export function WatchableScreen(props: { route: { params: { id: string } } }) {
@@ -34,10 +35,10 @@ export function WatchableScreen(props: { route: { params: { id: string } } }) {
 
   return (
     <>
-      <LoaderScreen fetchData={fetchData} isReady={watchable != null} />
+      <LoaderAnimation fetchData={fetchData} isReady={watchable != null} loaderComponent={ScreenAnimatedLoader} />
       <ScrollView>
-        <Card containerStyle={commonStyles.card} >
-          <View style={commonStyles.poster}>
+        <Card containerStyle={cardStyles.card} >
+          <View style={cardStyles.poster}>
             <Avatar
               rounded
               size="xlarge"
@@ -47,7 +48,7 @@ export function WatchableScreen(props: { route: { params: { id: string } } }) {
           </View>
           <Card.Divider />
           <Card.Title>{watchable?.title}</Card.Title>
-          <View style={commonStyles.centerText}>
+          <View style={cardStyles.centerText}>
             <Card.FeaturedTitle>{watchable?.year} - {watchable?.rating}</Card.FeaturedTitle>
           </View>
           <Card.FeaturedSubtitle>{watchable?.story}</Card.FeaturedSubtitle>
@@ -70,7 +71,7 @@ export function WatchableScreen(props: { route: { params: { id: string } } }) {
   );
 }
 
-export function SimiliarWatchableCard(props: { similarMovie: SimiliarWatchable }) {
+function SimiliarWatchableCard(props: { similarMovie: SimiliarWatchable }) {
   const navigation = useNavigation();
 
   const openWatchable = () => {
@@ -80,8 +81,8 @@ export function SimiliarWatchableCard(props: { similarMovie: SimiliarWatchable }
   return (
     <>
       <TouchableWithoutFeedback onPress={openWatchable} >
-        <Card containerStyle={styles.cardItem}>
-          <View style={commonStyles.poster}>
+        <Card containerStyle={styles.watchableCardItem}>
+          <View style={cardStyles.poster}>
             <Avatar
               rounded
               size="xlarge"
@@ -97,7 +98,7 @@ export function SimiliarWatchableCard(props: { similarMovie: SimiliarWatchable }
   );
 }
 
-export function ActorCard(props: { actor: WatchableActor }) {
+function ActorCard(props: { actor: WatchableActor }) {
   const navigation = useNavigation();
 
   const openActor = () => {
@@ -107,8 +108,8 @@ export function ActorCard(props: { actor: WatchableActor }) {
   return (
     <>
       <TouchableWithoutFeedback onPress={openActor} >
-        <Card containerStyle={styles.cardItem}>
-          <View style={commonStyles.poster}>
+        <Card containerStyle={styles.actorCardItem}>
+          <View style={cardStyles.poster}>
             <Avatar
               size="xlarge"
               source={{ uri: props.actor.poster }}
@@ -127,8 +128,13 @@ const MemodSimiliarWatchableCard = React.memo(SimiliarWatchableCard, (prev, next
 const MemodActorCard = React.memo(ActorCard, (prev, next) => prev.actor.id == next.actor.id);
 
 const styles = StyleSheet.create({
-  cardItem: {
-    width: 150
+  watchableCardItem: {
+    width: 150,
+    height: 280
+  },
+  actorCardItem: {
+    width: 150,
+    height: 200
   },
   watchableCardItemPoster: {
     width: 120,
