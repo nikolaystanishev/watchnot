@@ -21,3 +21,10 @@ export const animationStyles = StyleSheet.create({
     height: 100
   }
 });
+
+export const numberCardStyles = StyleSheet.create({
+  card: {
+    marginBottom: 15,
+    height: 50
+  }
+})
