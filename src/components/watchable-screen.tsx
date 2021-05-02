@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, TouchableWithoutFeedback, ScrollView } from 'react-native';
-import { Avatar, Card } from 'react-native-elements';
+import { View, StyleSheet, TouchableWithoutFeedback, ScrollView, Text } from 'react-native';
+import { Avatar, Card, Chip } from 'react-native-elements';
 import { FlatList } from 'react-native-gesture-handler';
 
 import { useNavigation } from '@react-navigation/native';
@@ -8,15 +8,31 @@ import { useNavigation } from '@react-navigation/native';
 import { getWatchable } from 'imdb-crawler-api';
 import { getWatchableSeasonEpisodes, SimiliarWatchable, Watchable, WatchableActor, WatchableEpisode } from 'imdb-crawler-api/src/watchable';
 
+import { useDatabaseConnection } from '../db/connection';
+
 import { LoaderAnimation } from './common/loader-animation';
-import { cardStyles, numberCardStyles } from './common-styles/styles';
+import { cardStyles, colorStyles, numberCardStyles } from './common-styles/styles';
 import { ScreenAnimatedLoader } from './common/loader-screen';
 
 
 export function WatchableScreen(props: { route: { params: { id: string } } }) {
   const navigation = useNavigation();
+  const { seriesSubscriptionRepository } = useDatabaseConnection();
+
+  const [dbLoad, setDbLoad] = useState<boolean>(false);
   const [watchable, setWatchable] = useState<Watchable | null>(null);
   const [stars, setStars] = useState<WatchableActor[] | null>([]);
+  const [hasSubscription, setHasSubscription] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (watchable != null && watchable.id && !dbLoad) {
+      setDbLoad(true);
+      seriesSubscriptionRepository.hasSubscription(watchable.id).then((active: boolean) => {
+        setHasSubscription(active);
+        setDbLoad(false);
+      });
+    }
+  }, [watchable]);
 
   const fetchData = async () => {
     getWatchable(props.route.params.id).then((data: Watchable) => {
@@ -33,11 +49,33 @@ export function WatchableScreen(props: { route: { params: { id: string } } }) {
     navigation.navigate('Image', { image: watchable?.poster });
   }
 
+  const subscribe = async () => {
+    if (dbLoad) {
+      subscribe();
+      return;
+    }
+    if (watchable != null && watchable.id) {
+      setDbLoad(true);
+      seriesSubscriptionRepository.changeActiveStatus(watchable?.id).then((active: boolean) => {
+        setHasSubscription(active);
+        setDbLoad(false);
+      });
+    }
+  }
+
   return (
     <>
-      <LoaderAnimation fetchData={fetchData} isReady={watchable != null} loaderComponent={ScreenAnimatedLoader} />
+      <LoaderAnimation fetchData={fetchData} isReady={(watchable != null) && !dbLoad} loaderComponent={ScreenAnimatedLoader} />
       <ScrollView>
         <Card containerStyle={cardStyles.card} >
+          {watchable && watchable.episodeCount.seasons &&
+            <Chip
+              title={<Text style={hasSubscription ? colorStyles.whiteColor : colorStyles.mainColor}>New Episodes Subscribe</Text>}
+              type={hasSubscription ? "solid" : "outline"}
+              onPress={subscribe}
+              buttonStyle={hasSubscription ? colorStyles.mainBackgroundColor : colorStyles.mainBorderColor}
+            />
+          }
           <View style={cardStyles.poster}>
             <Avatar
               rounded
@@ -52,7 +90,7 @@ export function WatchableScreen(props: { route: { params: { id: string } } }) {
             <Card.FeaturedTitle>{watchable?.year} - {watchable?.rating}</Card.FeaturedTitle>
           </View>
           <Card.FeaturedSubtitle>{watchable?.story}</Card.FeaturedSubtitle>
-          {watchable && watchable.episodeCount && <SeriesEpisodes watchable={watchable} />}
+          {watchable && watchable.episodeCount.seasons && <SeriesEpisodes watchable={watchable} />}
           <Card.Divider />
           <FlatList
             horizontal

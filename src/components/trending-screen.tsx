@@ -43,6 +43,7 @@ export function TrendingScreen() {
     <>
       <LoaderAnimation fetchData={fetchData} isReady={trending.length != 0 && filter.length != 0} loaderComponent={ScreenAnimatedLoader} />
       <SearchBar
+        platform="default"
         placeholder="Search Movies"
         onChangeText={updateSearch}
         onCancel={updateSearch}

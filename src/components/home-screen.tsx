@@ -56,6 +56,7 @@ export function HomeScreen() {
   return (
     <>
       <SearchBar
+        platform="default"
         placeholder="Search"
         onChangeText={updateSearch}
         onCancel={updateSearch}
