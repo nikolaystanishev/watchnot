@@ -9,6 +9,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 
 import { HomeScreen } from './home-screen';
 import { TrendingScreen } from './trending-screen';
+import { NotificationScreen } from './notification-screen';
 import { WatchableScreen } from './watchable-screen';
 import { ImageScreen } from './common/image-screen';
 import { ActorScreen } from './actor-screen';
@@ -50,6 +51,7 @@ function TabNavigation() {
     >
       <Tab.Screen name='Home' component={HomeScreen} />
       <Tab.Screen name='Trending' component={TrendingScreen} />
+      <Tab.Screen name='Notifications' component={NotificationScreen} />
     </Tab.Navigator>
   )
 }
@@ -57,7 +59,8 @@ function TabNavigation() {
 
 const icons: { [key: string]: string } = {
   'Home': 'home',
-  'Trending': 'trending-up'
+  'Trending': 'trending-up',
+  'Notifications': 'notifications'
 }
 
 const styles = StyleSheet.create({
