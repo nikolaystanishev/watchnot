@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { SafeAreaView, StatusBar, StyleSheet } from 'react-native';
 
 import { NavigationContainer } from '@react-navigation/native';
@@ -22,12 +22,18 @@ import { ActorScreen } from './actor-screen';
 
 import { mainColor, secondaryColor } from './common-styles/colors';
 
+import { stopWarnings } from '../utils/warnings';
+
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 export function Navigation() {
   const { seriesSubscriptionRepository, notificationRepository } = useDatabaseConnection();
+
+  useEffect(() => {
+    stopWarnings();
+  }, []);
 
   useRegister(seriesSubscriptionRepository, notificationRepository, 60 * 60 * 10);
   useIntervalEffect(newSeriesEpisodes, 1000 * 60 * 10);
