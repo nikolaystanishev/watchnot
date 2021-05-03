@@ -1,13 +1,13 @@
-import React, { createContext, useCallback, useContext, useEffect, useState } from "react";
-import { ActivityIndicator } from "react-native";
+import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import { ActivityIndicator } from 'react-native';
 
-import { Connection, createConnection } from "typeorm";
+import { Connection, createConnection } from 'typeorm';
 
-import { NotificationModel } from "./entities/notification-model";
-import { SeriesSubscriptionModel } from "./entities/series-subscription-model";
+import { NotificationModel } from './entities/notification-model';
+import { SeriesSubscriptionModel } from './entities/series-subscription-model';
 
-import { SeriesSubscriptionRepository } from "./repositories/series-subscription-repository";
-import { NotificationRepository } from "./repositories/notification-repository";
+import { SeriesSubscriptionRepository } from './repositories/series-subscription-repository';
+import { NotificationRepository } from './repositories/notification-repository';
 
 
 interface DatabaseConnectionContextData {

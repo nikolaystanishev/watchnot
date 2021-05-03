@@ -10,6 +10,8 @@ import { getWatchableSeasonEpisodes, SimiliarWatchable, Watchable, WatchableActo
 
 import { useDatabaseConnection } from '../db/connection';
 
+import { createArrayFromSize } from '../utils/utils';
+
 import { LoaderAnimation } from './common/loader-animation';
 import { cardStyles, colorStyles, numberCardStyles } from './common-styles/styles';
 import { ScreenAnimatedLoader } from './common/loader-screen';
@@ -71,7 +73,7 @@ export function WatchableScreen(props: { route: { params: { id: string } } }) {
           {watchable && watchable.episodeCount.seasons &&
             <Chip
               title={<Text style={hasSubscription ? colorStyles.whiteColor : colorStyles.mainColor}>New Episodes Subscribe</Text>}
-              type={hasSubscription ? "solid" : "outline"}
+              type={hasSubscription ? 'solid' : 'outline'}
               onPress={subscribe}
               buttonStyle={hasSubscription ? colorStyles.mainBackgroundColor : colorStyles.mainBorderColor}
             />
@@ -79,7 +81,7 @@ export function WatchableScreen(props: { route: { params: { id: string } } }) {
           <View style={cardStyles.poster}>
             <Avatar
               rounded
-              size="xlarge"
+              size='xlarge'
               source={{ uri: watchable?.poster }}
               onPress={openImage}
             />
@@ -123,7 +125,7 @@ function SimiliarWatchableCard(props: { similarMovie: SimiliarWatchable }) {
         <View style={cardStyles.poster}>
           <Avatar
             rounded
-            size="xlarge"
+            size='xlarge'
             source={{ uri: props.similarMovie.poster }}
             containerStyle={styles.watchableCardItemPoster}
           />
@@ -147,7 +149,7 @@ function ActorCard(props: { actor: WatchableActor }) {
       <Card containerStyle={styles.actorCardItem}>
         <View style={cardStyles.poster}>
           <Avatar
-            size="xlarge"
+            size='xlarge'
             source={{ uri: props.actor.poster }}
             containerStyle={styles.actorCardItemPoster}
           />
@@ -195,17 +197,17 @@ function SeriesEpisodes(props: { watchable: Watchable }) {
       <Card.Divider />
       <FlatList
         horizontal
-        data={Array.from({ length: Number(props.watchable.episodeCount['seasons']) }, (_, i) => (i + 1).toString())}
+        data={createArrayFromSize(props.watchable.episodeCount['seasons'])}
         renderItem={({ item }) => <NumberCard key={props.watchable.id + item} value={item} selector={selectSeason} />}
         showsHorizontalScrollIndicator={false}
       />
       <FlatList
         horizontal
-        data={Array.from({ length: Number(seasonEpisodes.length) }, (_, i) => (i + 1).toString())}
+        data={createArrayFromSize(seasonEpisodes.length)}
         renderItem={({ item }) => <NumberCard key={props.watchable.id + season + item} value={item} selector={selectEpisode} />}
         showsHorizontalScrollIndicator={false}
       />
-      {episode != -1 && <EpisodeCard episode={seasonEpisodes[episode]} />}
+      {episode != -1 && <MemodEpisodeCard episode={seasonEpisodes[episode]} />}
     </>
   )
 }
@@ -232,7 +234,7 @@ function EpisodeCard(props: { episode: WatchableEpisode }) {
       <View style={cardStyles.poster}>
         <Avatar
           rounded
-          size="xlarge"
+          size='xlarge'
           source={{ uri: props.episode.poster }}
           onPress={openImage}
         />
@@ -240,15 +242,23 @@ function EpisodeCard(props: { episode: WatchableEpisode }) {
       <Card.Divider />
       <Card.Title>{props.episode.name}</Card.Title>
       <View style={cardStyles.centerText}>
-        <Card.FeaturedTitle>{props.episode.airDate} - {props.episode.rating}</Card.FeaturedTitle>
+        <Card.FeaturedTitle>
+          {props.episode.airDate?.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })} - {props.episode.rating}
+        </Card.FeaturedTitle>
       </View>
       <Card.FeaturedSubtitle>{props.episode.story}</Card.FeaturedSubtitle>
     </Card>
   )
 }
 
-const MemodSimiliarWatchableCard = React.memo(SimiliarWatchableCard, (prev, next) => prev.similarMovie.id == next.similarMovie.id);
+const MemodSimiliarWatchableCard = React.memo(
+  SimiliarWatchableCard, (prev, next) => prev.similarMovie.id == next.similarMovie.id
+);
 const MemodActorCard = React.memo(ActorCard, (prev, next) => prev.actor.id == next.actor.id);
+const MemodEpisodeCard = React.memo(
+  EpisodeCard,
+  (prev, next) => prev.episode.season == next.episode.season && prev.episode.episode == next.episode.episode
+);
 
 const styles = StyleSheet.create({
   watchableCardItem: {

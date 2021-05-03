@@ -56,8 +56,8 @@ export function HomeScreen() {
   return (
     <>
       <SearchBar
-        platform="default"
-        placeholder="Search"
+        platform='default'
+        placeholder='Search'
         onChangeText={updateSearch}
         onCancel={updateSearch}
         value={search} />
@@ -104,7 +104,7 @@ export function WatchableCard(props: { searchWatchable: SearchWatchable }) {
           <View style={cardStyles.poster}>
             <Avatar
               rounded
-              size="xlarge"
+              size='xlarge'
               source={{ uri: props.searchWatchable.poster }}
               containerStyle={styles.watchableCardItemPoster}
             />
@@ -135,7 +135,7 @@ export function ActorCard(props: { actor: SearchActor }) {
         <Card containerStyle={styles.actorCardItem}>
           <View style={cardStyles.poster}>
             <Avatar
-              size="xlarge"
+              size='xlarge'
               source={{ uri: props.actor.poster }}
               containerStyle={styles.actorCardItemPoster}
             />
