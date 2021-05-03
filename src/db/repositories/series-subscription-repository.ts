@@ -1,6 +1,6 @@
-import { Connection, Repository } from "typeorm";
+import { Connection, Repository } from 'typeorm';
 
-import { SeriesSubscriptionModel } from "../entities/series-subscription-model";
+import { SeriesSubscriptionModel } from '../entities/series-subscription-model';
 
 
 export class SeriesSubscriptionRepository {
@@ -8,6 +8,10 @@ export class SeriesSubscriptionRepository {
 
   constructor(connection: Connection) {
     this.ormRepository = connection.getRepository(SeriesSubscriptionModel);
+  }
+
+  public async getAll(): Promise<SeriesSubscriptionModel[]> {
+    return await this.ormRepository.find();
   }
 
   public async hasSubscription(watchableId: string): Promise<boolean> {

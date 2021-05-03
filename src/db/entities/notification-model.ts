@@ -27,5 +27,5 @@ export class NotificationModel {
     unique: true,
     nullable: true,
   })
-  air_date: string;
+  air_date: Date;
 }

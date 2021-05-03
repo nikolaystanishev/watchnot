@@ -7,6 +7,12 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
 
+import { useRegister } from '../background/register';
+import { useIntervalEffect } from '../hooks/use-interval-effect';
+import { useDatabaseConnection } from '../db/connection';
+
+import { newSeriesEpisodes } from '../background/new-series-observer';
+
 import { HomeScreen } from './home-screen';
 import { TrendingScreen } from './trending-screen';
 import { NotificationScreen } from './notification-screen';
@@ -21,6 +27,11 @@ const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 export function Navigation() {
+  const { seriesSubscriptionRepository, notificationRepository } = useDatabaseConnection();
+
+  useRegister(seriesSubscriptionRepository, notificationRepository, 60 * 60 * 10);
+  useIntervalEffect(newSeriesEpisodes, 1000 * 60 * 10);
+
   return (
     <SafeAreaView style={styles.container}>
       <NavigationContainer>
