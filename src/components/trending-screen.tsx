@@ -13,7 +13,6 @@ import { useIntervalEffect } from '../hooks/use-interval-effect';
 import { ScreenAnimatedLoader } from './common/loader-screen';
 
 
-
 export function TrendingScreen() {
   const [search, setSearch] = useState<string>('');
   const [trending, setTrending] = useState<Trending[]>([]);

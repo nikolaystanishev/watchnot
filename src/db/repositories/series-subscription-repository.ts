@@ -20,9 +20,10 @@ export class SeriesSubscriptionRepository {
     return seriesSubscription != undefined && seriesSubscription.active;
   }
 
-  public async create(watchableId: string): Promise<SeriesSubscriptionModel> {
+  public async create(watchableId: string, watchableName: string): Promise<SeriesSubscriptionModel> {
     const seriesSubscription = this.ormRepository.create({
-      watchable_id: watchableId
+      watchable_id: watchableId,
+      watchable_name: watchableName
     });
 
     await this.ormRepository.save(seriesSubscription);
@@ -30,10 +31,10 @@ export class SeriesSubscriptionRepository {
     return seriesSubscription;
   }
 
-  public async changeActiveStatus(watchableId: string): Promise<boolean> {
+  public async changeActiveStatus(watchableId: string, watchableName: string): Promise<boolean> {
     let seriesSubscription = await this.ormRepository.findOne({ watchable_id: watchableId });
     if (!seriesSubscription) {
-      seriesSubscription = await this.create(watchableId);
+      seriesSubscription = await this.create(watchableId, watchableName);
       return seriesSubscription.active;
     }
 

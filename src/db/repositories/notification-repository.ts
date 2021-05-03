@@ -12,11 +12,14 @@ export class NotificationRepository {
   }
 
   public async getAll(): Promise<NotificationModel[]> {
-    return await this.ormRepository.find();
+    return await this.ormRepository.find({
+      relations: ['series_subscription']
+    });
   }
 
   public async createOrUpdate(
-    series_subscription: SeriesSubscriptionModel, season: string, episode: string, air_date: Date
+    series_subscription: SeriesSubscriptionModel, season: string, episode: string, air_date: Date,
+    air_date_string: string
   ): Promise<NotificationModel> {
     let notification = await this.ormRepository.findOne({
       series_subscription: series_subscription,
@@ -27,13 +30,15 @@ export class NotificationRepository {
     if (notification) {
       if (notification.air_date != air_date) {
         notification.air_date = air_date;
+        notification.air_date_string = air_date_string;
       }
     } else {
       notification = this.ormRepository.create({
         series_subscription: series_subscription,
         season: season,
         episode: episode,
-        air_date: air_date
+        air_date: air_date,
+        air_date_string: air_date_string
       });
     }
 

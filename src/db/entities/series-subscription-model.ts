@@ -1,7 +1,9 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+
+import { NotificationModel } from './notification-model';
 
 
-@Entity('series-subscription')
+@Entity('series-subscription-model-3')
 export class SeriesSubscriptionModel {
   @PrimaryGeneratedColumn('increment')
   id: number;
@@ -14,7 +16,17 @@ export class SeriesSubscriptionModel {
 
   @Column({
     nullable: false,
+  })
+  watchable_name: string;
+
+  @Column({
+    nullable: false,
     default: true
   })
   active: boolean;
+
+  @OneToMany(() => NotificationModel, (notification: NotificationModel) => notification.series_subscription, {
+    cascade: true
+  })
+  notifications: NotificationModel[];
 }

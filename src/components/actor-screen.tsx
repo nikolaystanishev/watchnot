@@ -36,7 +36,7 @@ export function ActorScreen(props: { route: { params: { id: string } } }) {
           <View style={cardStyles.poster}>
             <Avatar
               rounded
-              size="xlarge"
+              size='xlarge'
               source={{ uri: actor?.image }}
               onPress={openImage}
             />

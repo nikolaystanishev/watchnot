@@ -8,11 +8,11 @@ export const cardStyles = StyleSheet.create({
     marginBottom: 15
   },
   poster: {
-    alignItems: "center",
+    alignItems: 'center',
     marginVertical: 10
   },
   centerText: {
-    alignItems: "center"
+    alignItems: 'center'
   }
 });
 
@@ -41,6 +41,6 @@ export const colorStyles = StyleSheet.create({
     color: mainColor
   },
   whiteColor: {
-    color: "white"
+    color: 'white'
   }
 })

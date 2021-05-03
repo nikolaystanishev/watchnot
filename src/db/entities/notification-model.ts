@@ -1,31 +1,38 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { SeriesSubscriptionModel } from "./series-subscription-model";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { SeriesSubscriptionModel } from './series-subscription-model';
 
 
-@Entity('notification')
+@Entity('notification-model-3')
 export class NotificationModel {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @OneToOne(() => SeriesSubscriptionModel)
+  @ManyToOne(
+    () => SeriesSubscriptionModel, (seriesSubscription: SeriesSubscriptionModel) => seriesSubscription.notifications,
+    {
+      cascade: true
+    }
+  )
   @JoinColumn()
   series_subscription: SeriesSubscriptionModel;
 
   @Column({
-    unique: true,
     nullable: true,
   })
   season: string;
 
   @Column({
-    unique: true,
     nullable: true,
   })
   episode: string;
 
   @Column({
-    unique: true,
     nullable: true,
   })
   air_date: Date;
+
+  @Column({
+    nullable: true,
+  })
+  air_date_string: string;
 }

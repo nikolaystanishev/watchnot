@@ -58,7 +58,7 @@ export function WatchableScreen(props: { route: { params: { id: string } } }) {
     }
     if (watchable != null && watchable.id) {
       setDbLoad(true);
-      seriesSubscriptionRepository.changeActiveStatus(watchable?.id).then((active: boolean) => {
+      seriesSubscriptionRepository.changeActiveStatus(watchable?.id, watchable.title).then((active: boolean) => {
         setHasSubscription(active);
         setDbLoad(false);
       });
@@ -243,7 +243,7 @@ function EpisodeCard(props: { episode: WatchableEpisode }) {
       <Card.Title>{props.episode.name}</Card.Title>
       <View style={cardStyles.centerText}>
         <Card.FeaturedTitle>
-          {props.episode.airDate?.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })} - {props.episode.rating}
+          {props.episode.airDateString} - {props.episode.rating}
         </Card.FeaturedTitle>
       </View>
       <Card.FeaturedSubtitle>{props.episode.story}</Card.FeaturedSubtitle>

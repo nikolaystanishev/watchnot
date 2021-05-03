@@ -3,6 +3,7 @@ import * as TaskManager from 'expo-task-manager';
 
 import { getWatchable } from 'imdb-crawler-api';
 import { getWatchableSeasonEpisodes } from 'imdb-crawler-api/src/watchable';
+import { SeriesSubscriptionModel } from '../db/entities/series-subscription-model';
 
 import { NotificationRepository } from '../db/repositories/notification-repository';
 import { SeriesSubscriptionRepository } from '../db/repositories/series-subscription-repository';
@@ -29,16 +30,27 @@ export const newSeriesEpisodes = async (seriesSubscriptionRepository: SeriesSubs
   let newData: boolean = false;
 
   for (const seriesSubscription of await seriesSubscriptionRepository.getAll()) {
-    const watchable = await getWatchable(seriesSubscription.watchable_id);
-    for (const season of createArrayFromSize(watchable.episodeCount['seasons']).reverse()) {
-      for (const episode of (await getWatchableSeasonEpisodes(seriesSubscription.watchable_id, season)).reverse()) {
-        if (episode.airDate) {
-          if (episode.airDate > new Date()) {
-            notificationRepository.createOrUpdate(seriesSubscription, episode.season, episode.episode, episode.airDate);
-            newData = true;
-          } else {
-            return newData;
-          }
+    if (seriesSubscription.active) {
+      const result = await newWatchableSeriesEpisodes(seriesSubscription, notificationRepository);
+      newData = newData || result;
+    }
+  }
+
+  return newData;
+}
+
+const newWatchableSeriesEpisodes = async (seriesSubscription: SeriesSubscriptionModel, notificationRepository: NotificationRepository): Promise<boolean> => {
+  let newData: boolean = false;
+
+  const watchable = await getWatchable(seriesSubscription.watchable_id);
+  for (const season of createArrayFromSize(watchable.episodeCount['seasons']).reverse()) {
+    for (const episode of (await getWatchableSeasonEpisodes(seriesSubscription.watchable_id, season)).reverse()) {
+      if (episode.airDate) {
+        if (episode.airDate > new Date()) {
+          await notificationRepository.createOrUpdate(seriesSubscription, episode.season, episode.episode, episode.airDate, episode.airDateString);
+          newData = true;
+        } else {
+          return newData;
         }
       }
     }

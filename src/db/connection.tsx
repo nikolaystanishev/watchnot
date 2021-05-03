@@ -28,7 +28,7 @@ export const DatabaseConnectionProvider: React.FC = ({ children }) => {
       database: 'watchnot.db',
       driver: require('expo-sqlite'),
       entities: [SeriesSubscriptionModel, NotificationModel],
-      synchronize: true,
+      synchronize: true
     });
 
     setConnection(createdConnection);
