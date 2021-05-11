@@ -26,17 +26,25 @@ export const newSeriesObserverDefine = (seriesSubscriptionRepository: SeriesSubs
 }
 
 export const newSeriesEpisodes = async (seriesSubscriptionRepository: SeriesSubscriptionRepository, notificationRepository: NotificationRepository): Promise<boolean> => {
-  console.log('background scan');
+  console.log('background scan series');
   let newData: boolean = false;
 
   for (const seriesSubscription of await seriesSubscriptionRepository.getAll()) {
-    if (seriesSubscription.active) {
-      const result = await newWatchableSeriesEpisodes(seriesSubscription, notificationRepository);
-      newData = newData || result;
-    }
+    const result = await newPerSeriesEpisodes(notificationRepository, seriesSubscription);
+    newData = newData || result;
   }
 
   return newData;
+}
+
+export const newPerSeriesEpisodes = async (notificationRepository: NotificationRepository, seriesSubscription: SeriesSubscriptionModel): Promise<boolean> => {
+  console.log('background scan per series');
+
+  if (seriesSubscription.active) {
+    return await newWatchableSeriesEpisodes(seriesSubscription, notificationRepository);
+  }
+
+  return false;
 }
 
 const newWatchableSeriesEpisodes = async (seriesSubscription: SeriesSubscriptionModel, notificationRepository: NotificationRepository): Promise<boolean> => {

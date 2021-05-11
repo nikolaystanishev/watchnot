@@ -1,3 +1,5 @@
+import * as Notifications from 'expo-notifications';
+
 import { Connection, Repository } from 'typeorm';
 
 import { NotificationModel } from '../entities/notification-model';
@@ -5,9 +7,11 @@ import { SeriesSubscriptionModel } from '../entities/series-subscription-model';
 
 
 export class NotificationRepository {
+  private connection: Connection;
   private ormRepository: Repository<NotificationModel>;
 
   constructor(connection: Connection) {
+    this.connection = connection;
     this.ormRepository = connection.getRepository(NotificationModel);
   }
 
@@ -15,6 +19,12 @@ export class NotificationRepository {
     return await this.ormRepository.find({
       relations: ['series_subscription']
     });
+  }
+
+  public async getActiveByWatchableId(watchableId: String): Promise<NotificationModel[]> {
+    return (await this.getAll()).filter((notification: NotificationModel) =>
+      notification.series_subscription.watchable_id == watchableId && notification.series_subscription.active
+    );
   }
 
   public async createOrUpdate(
@@ -49,5 +59,9 @@ export class NotificationRepository {
 
   public async delete(id: number): Promise<void> {
     await this.ormRepository.delete(id);
+  }
+
+  public async deleteAllWhereDateIsLessThanToday(): Promise<void> {
+    await this.connection.createQueryBuilder().delete().from(NotificationModel).where('air_date < DATE()').execute();
   }
 }

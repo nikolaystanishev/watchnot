@@ -8,10 +8,7 @@ export class NotificationModel {
   id: number;
 
   @ManyToOne(
-    () => SeriesSubscriptionModel, (seriesSubscription: SeriesSubscriptionModel) => seriesSubscription.notifications,
-    {
-      cascade: true
-    }
+    () => SeriesSubscriptionModel, (seriesSubscription: SeriesSubscriptionModel) => seriesSubscription.notifications
   )
   @JoinColumn()
   series_subscription: SeriesSubscriptionModel;

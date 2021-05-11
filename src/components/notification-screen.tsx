@@ -6,7 +6,7 @@ import { useIsFocused, useNavigation } from '@react-navigation/native';
 
 import { useDatabaseConnection } from '../db/connection';
 
-import { newSeriesEpisodes } from '../background/new-series-observer';
+import { newPerSeriesEpisodes } from '../background/new-series-observer';
 
 import { NotificationModel } from '../db/entities/notification-model';
 
@@ -23,29 +23,27 @@ export function NotificationScreen() {
 
   useEffect(() => {
     if (isFocused) {
+      setNotifications([]);
       fetchData();
     }
   }, [isFocused]);
 
-  const fetchData = () => {
+  const fetchData = async () => {
     setIsReady(false);
-    newSeriesEpisodes(seriesSubscriptionRepository, notificationRepository).then(() => {
-      notificationRepository.getAll().then((data) => {
-        const filteredData: NotificationModel[] = [];
-        const today = new Date();
-        for (const notification of data) {
-          if (notification.air_date < today) {
-            notificationRepository.delete(notification.id);
-          } else {
-            if (notification.series_subscription.active) {
-              filteredData.push(notification);
-            }
-          }
-        }
-        setNotifications(filteredData);
-        setIsReady(true);
-      });
-    });
+    await notificationRepository.deleteAllWhereDateIsLessThanToday();
+
+    for (const seriesSubscription of await seriesSubscriptionRepository.getAll()) {
+      await newPerSeriesEpisodes(notificationRepository, seriesSubscription);
+      const filteredData: NotificationModel[] = [];
+
+      for (const notification of await notificationRepository.getActiveByWatchableId(seriesSubscription.watchable_id)) {
+        filteredData.push(notification);
+      }
+
+      setNotifications(notifications => [...notifications, ...filteredData]);
+    }
+
+    setIsReady(true);
   }
 
   return (
@@ -53,7 +51,7 @@ export function NotificationScreen() {
       <LoaderAnimation fetchData={() => new Promise(() => { })} isReady={isReady} loaderComponent={ScreenAnimatedLoader} />
       <FlatList
         data={notifications}
-        renderItem={({ item }) => <ListElement key={item.id} notification={item} />}
+        renderItem={({ item }) => <ListElement key={item.id.toString()} notification={item} />}
       />
     </>
   );

@@ -11,7 +11,9 @@ export class SeriesSubscriptionRepository {
   }
 
   public async getAll(): Promise<SeriesSubscriptionModel[]> {
-    return await this.ormRepository.find();
+    return await this.ormRepository.find({
+      relations: ['notifications']
+    });
   }
 
   public async hasSubscription(watchableId: string): Promise<boolean> {
