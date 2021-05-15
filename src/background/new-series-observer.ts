@@ -55,8 +55,8 @@ const newWatchableSeriesEpisodes = async (seriesSubscription: SeriesSubscription
     for (const episode of (await getWatchableSeasonEpisodes(seriesSubscription.watchable_id, season)).reverse()) {
       if (episode.airDate) {
         if (episode.airDate > new Date()) {
-          await notificationRepository.createOrUpdate(seriesSubscription, episode.season, episode.episode, episode.airDate, episode.airDateString);
-          newData = true;
+          const result = await notificationRepository.createOrUpdate(seriesSubscription, episode.season, episode.episode, episode.airDate, episode.airDateString);
+          newData = newData || result;
         } else {
           return newData;
         }

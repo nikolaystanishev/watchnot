@@ -3,10 +3,10 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { NotificationModel } from './notification-model';
 
 
-@Entity('series-subscription-model-3')
+@Entity('series-subscription-model')
 export class SeriesSubscriptionModel {
-  @PrimaryGeneratedColumn('increment')
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
 
   @Column({
     unique: true,
@@ -24,9 +24,4 @@ export class SeriesSubscriptionModel {
     default: true
   })
   active: boolean;
-
-  @OneToMany(() => NotificationModel, (notification: NotificationModel) => notification.series_subscription, {
-    cascade: true
-  })
-  notifications: NotificationModel[];
 }

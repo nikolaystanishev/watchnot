@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { RefreshControl } from 'react-native';
 import { ListItem } from 'react-native-elements';
 import { FlatList } from 'react-native-gesture-handler';
 
-import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
 import { useDatabaseConnection } from '../db/connection';
 
@@ -16,20 +17,26 @@ import { ScreenAnimatedLoader } from './common/loader-screen';
 
 export function NotificationScreen() {
   const { seriesSubscriptionRepository, notificationRepository } = useDatabaseConnection();
-  const isFocused = useIsFocused();
 
   const [isReady, setIsReady] = useState<boolean>(false);
   const [notifications, setNotifications] = useState<NotificationModel[]>([]);
 
+  const [refreshing, setRefreshing] = React.useState(false);
+
   useEffect(() => {
-    if (isFocused) {
-      setNotifications([]);
-      fetchData();
-    }
-  }, [isFocused]);
+    fetchData();
+  }, []);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    fetchData().then(() => {
+      setRefreshing(false);
+    });
+  }, []);
 
   const fetchData = async () => {
     setIsReady(false);
+    setNotifications([]);
     await notificationRepository.deleteAllWhereDateIsLessThanToday();
 
     for (const seriesSubscription of await seriesSubscriptionRepository.getAll()) {
@@ -40,7 +47,7 @@ export function NotificationScreen() {
         filteredData.push(notification);
       }
 
-      setNotifications(notifications => [...notifications, ...filteredData]);
+      setNotifications((notifications: NotificationModel[]) => [...notifications, ...filteredData]);
     }
 
     setIsReady(true);
@@ -52,6 +59,7 @@ export function NotificationScreen() {
       <FlatList
         data={notifications}
         renderItem={({ item }) => <ListElement key={item.id.toString()} notification={item} />}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       />
     </>
   );

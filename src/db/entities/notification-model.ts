@@ -2,15 +2,16 @@ import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 't
 import { SeriesSubscriptionModel } from './series-subscription-model';
 
 
-@Entity('notification-model-3')
+@Entity('notification-model')
 export class NotificationModel {
-  @PrimaryGeneratedColumn('increment')
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
 
-  @ManyToOne(
-    () => SeriesSubscriptionModel, (seriesSubscription: SeriesSubscriptionModel) => seriesSubscription.notifications
-  )
-  @JoinColumn()
+  @Column()
+  series_subscription_id: string;
+
+  @ManyToOne(() => SeriesSubscriptionModel)
+  @JoinColumn({ name: 'series_subscription_id', referencedColumnName: 'id' })
   series_subscription: SeriesSubscriptionModel;
 
   @Column({

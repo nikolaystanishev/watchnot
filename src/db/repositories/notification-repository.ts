@@ -30,31 +30,36 @@ export class NotificationRepository {
   public async createOrUpdate(
     series_subscription: SeriesSubscriptionModel, season: string, episode: string, air_date: Date,
     air_date_string: string
-  ): Promise<NotificationModel> {
+  ): Promise<boolean> {
     let notification = await this.ormRepository.findOne({
-      series_subscription: series_subscription,
+      series_subscription_id: series_subscription.id,
       season: season,
       episode: episode
     });
 
     if (notification) {
       if (notification.air_date != air_date) {
-        notification.air_date = air_date;
-        notification.air_date_string = air_date_string;
+        await this.ormRepository.update(notification.id, { air_date: air_date, air_date_string: air_date_string });
+        return true;
       }
+      return false;
     } else {
-      notification = this.ormRepository.create({
-        series_subscription: series_subscription,
+      await this.connection
+        .createQueryBuilder()
+        .insert()
+        .into(NotificationModel)
+        .values([
+          {
+            series_subscription_id: series_subscription.id,
         season: season,
         episode: episode,
         air_date: air_date,
         air_date_string: air_date_string
-      });
+          }
+        ])
+        .execute();
+      return true;
     }
-
-    await this.ormRepository.save(notification);
-
-    return notification;
   }
 
   public async delete(id: number): Promise<void> {
