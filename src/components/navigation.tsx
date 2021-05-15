@@ -10,6 +10,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { useRegister } from '../background/register';
 import { useIntervalEffect } from '../hooks/use-interval-effect';
 import { useDatabaseConnection } from '../db/connection';
+import { useNotifications } from '../background/notifications';
 
 import { newSeriesEpisodes } from '../background/new-series-observer';
 
@@ -34,6 +35,8 @@ export function Navigation() {
   useEffect(() => {
     stopWarnings();
   }, []);
+
+  useNotifications();
 
   useRegister(seriesSubscriptionRepository, notificationRepository, 60 * 60 * 10);
   useIntervalEffect(newSeriesEpisodes, 1000 * 60 * 10);

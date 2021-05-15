@@ -2,7 +2,7 @@
   "expo": {
     "name": "watchnot",
     "slug": "watchnot",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -28,7 +28,9 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.watchnot",
+      "versionCode": 3
     },
     "web": {
       "favicon": "./assets/favicon.png"

@@ -16,6 +16,8 @@
     "expo": "^41.0.0",
     "expo-app-loading": "^1.0.3",
     "expo-background-fetch": "~9.1.0",
+    "expo-notifications": "^0.11.6",
+    "expo-permissions": "^12.0.1",
     "expo-sqlite": "~9.1.0",
     "expo-status-bar": "~1.0.4",
     "expo-task-manager": "~9.1.0",
@@ -37,13 +39,13 @@
   "devDependencies": {
     "@babel/core": "~7.9.0",
     "@types/expo__vector-icons": "^9.0.1",
+    "@types/node": "^15.0.3",
     "@types/react": "~16.9.35",
     "@types/react-dom": "~16.9.8",
     "@types/react-native": "~0.63.2",
     "babel-plugin-transform-typescript-metadata": "^0.3.2",
     "react-devtools": "^4.12.1",
-    "typescript": "~4.0.0",
-    "@types/node": "^15.0.3"
+    "typescript": "~4.0.0"
   },
   "private": true
 }

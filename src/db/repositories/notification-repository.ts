@@ -1,6 +1,6 @@
-import * as Notifications from 'expo-notifications';
-
 import { Connection, Repository } from 'typeorm';
+
+import { pushNotification } from '../../background/notifications';
 
 import { NotificationModel } from '../entities/notification-model';
 import { SeriesSubscriptionModel } from '../entities/series-subscription-model';
@@ -40,6 +40,12 @@ export class NotificationRepository {
     if (notification) {
       if (notification.air_date != air_date) {
         await this.ormRepository.update(notification.id, { air_date: air_date, air_date_string: air_date_string });
+
+        pushNotification({
+          title: 'Reschedule Series Episode',
+          body: series_subscription.watchable_name + ' S' + season + ' Ep' + episode + ': ' + air_date_string
+        });
+
         return true;
       }
       return false;
@@ -51,13 +57,19 @@ export class NotificationRepository {
         .values([
           {
             series_subscription_id: series_subscription.id,
-        season: season,
-        episode: episode,
-        air_date: air_date,
-        air_date_string: air_date_string
+            season: season,
+            episode: episode,
+            air_date: air_date,
+            air_date_string: air_date_string
           }
         ])
         .execute();
+
+      pushNotification({
+        title: 'New Series Episode',
+        body: series_subscription.watchable_name + ' S' + season + ' Ep' + episode + ': ' + air_date_string
+      });
+
       return true;
     }
   }
