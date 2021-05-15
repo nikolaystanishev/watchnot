@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, TouchableWithoutFeedback, View, StyleSheet } from 'react-native';
+import { FlatList, TouchableWithoutFeedback, View, StyleSheet, useColorScheme } from 'react-native';
 import { Avatar, Card, SearchBar } from 'react-native-elements';
 
 import { useNavigation } from '@react-navigation/native';
 
 import { getSearchActor, getSearchWatchable, SearchActor, SearchWatchable } from 'imdb-crawler-api/src/search';
+
+import { TextColorTheme } from './common/text-color-theme';
 
 import { cardStyles } from './common-styles/styles';
 import { LoaderAnimation } from './common/loader-animation';
@@ -12,6 +14,8 @@ import { ComponentAnimatedLoader } from './common/loader-component';
 
 
 export function HomeScreen() {
+  const colorScheme = useColorScheme();
+
   const [watchableReady, setWatchableReady] = useState<boolean>(false);
   const [actorReady, setActorReady] = useState<boolean>(false);
   const [search, setSearch] = useState<string>('');
@@ -56,13 +60,16 @@ export function HomeScreen() {
   return (
     <>
       <SearchBar
+        round
+        searchIcon={{ size: 24 }}
+        lightTheme={colorScheme === 'light'}
         platform='default'
         placeholder='Search'
         onChangeText={updateSearch}
         onCancel={updateSearch}
         value={search} />
       <View style={cardStyles.centerText}>
-        <Card.FeaturedTitle>Titles</Card.FeaturedTitle>
+        <Card.FeaturedTitle><TextColorTheme text='Titles' /></Card.FeaturedTitle>
       </View>
       <View style={styles.watchableCardContainer}>
         <LoaderAnimation fetchData={() => { return new Promise(() => { }) }} isReady={watchableReady} loaderComponent={ComponentAnimatedLoader} />
@@ -74,7 +81,7 @@ export function HomeScreen() {
         />
       </View>
       <View style={cardStyles.centerText}>
-        <Card.FeaturedTitle>Actors</Card.FeaturedTitle>
+        <Card.FeaturedTitle><TextColorTheme text='Actors' /></Card.FeaturedTitle>
       </View>
       <View style={styles.actorCardContainer}>
         <LoaderAnimation fetchData={() => { return new Promise(() => { }) }} isReady={actorReady} loaderComponent={ComponentAnimatedLoader} />
@@ -112,9 +119,9 @@ export function WatchableCard(props: { searchWatchable: SearchWatchable }) {
           <Card.Divider />
           <Card.Title>{props.searchWatchable.name}</Card.Title>
           <View style={cardStyles.centerText}>
-            <Card.FeaturedSubtitle>{props.searchWatchable.type}</Card.FeaturedSubtitle>
-            <Card.FeaturedSubtitle>{props.searchWatchable.year}</Card.FeaturedSubtitle>
-            <Card.FeaturedSubtitle>{props.searchWatchable.part}</Card.FeaturedSubtitle>
+            <Card.FeaturedSubtitle><TextColorTheme text={props.searchWatchable.type} /></Card.FeaturedSubtitle>
+            <Card.FeaturedSubtitle><TextColorTheme text={props.searchWatchable.year} /></Card.FeaturedSubtitle>
+            <Card.FeaturedSubtitle><TextColorTheme text={props.searchWatchable.part} /></Card.FeaturedSubtitle>
           </View>
         </Card>
       </TouchableWithoutFeedback >

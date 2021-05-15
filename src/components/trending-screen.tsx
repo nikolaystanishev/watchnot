@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, useColorScheme } from 'react-native';
 import { SearchBar, ListItem, Avatar } from 'react-native-elements';
 
 import { useNavigation } from '@react-navigation/native';
@@ -14,6 +14,8 @@ import { ScreenAnimatedLoader } from './common/loader-screen';
 
 
 export function TrendingScreen() {
+  const colorScheme = useColorScheme();
+
   const [search, setSearch] = useState<string>('');
   const [trending, setTrending] = useState<Trending[]>([]);
   const [filter, setFilter] = useState<Trending[]>([]);
@@ -42,6 +44,9 @@ export function TrendingScreen() {
     <>
       <LoaderAnimation fetchData={fetchData} isReady={trending.length != 0 && filter.length != 0} loaderComponent={ScreenAnimatedLoader} />
       <SearchBar
+        round
+        searchIcon={{ size: 24 }}
+        lightTheme={colorScheme === 'light'}
         platform='default'
         placeholder='Search Movies'
         onChangeText={updateSearch}

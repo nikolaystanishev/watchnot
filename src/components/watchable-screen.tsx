@@ -8,6 +8,8 @@ import { useNavigation } from '@react-navigation/native';
 import { getWatchable } from 'imdb-crawler-api';
 import { getWatchableSeasonEpisodes, SimiliarWatchable, Watchable, WatchableActor, WatchableEpisode } from 'imdb-crawler-api/src/watchable';
 
+import { TextColorTheme } from './common/text-color-theme';
+
 import { useDatabaseConnection } from '../db/connection';
 
 import { createArrayFromSize } from '../utils/utils';
@@ -89,9 +91,11 @@ export function WatchableScreen(props: { route: { params: { id: string } } }) {
           <Card.Divider />
           <Card.Title>{watchable?.title}</Card.Title>
           <View style={cardStyles.centerText}>
-            <Card.FeaturedTitle>{watchable?.year} - {watchable?.rating}</Card.FeaturedTitle>
+            <Card.FeaturedTitle>
+              <TextColorTheme text={`${watchable?.year} - ${watchable?.rating}`} />
+            </Card.FeaturedTitle>
           </View>
-          <Card.FeaturedSubtitle>{watchable?.story}</Card.FeaturedSubtitle>
+          <Card.FeaturedSubtitle><TextColorTheme text={watchable?.story} /></Card.FeaturedSubtitle>
           {watchable && watchable.episodeCount.seasons && <SeriesEpisodes watchable={watchable} />}
           <Card.Divider />
           <FlatList
@@ -243,10 +247,10 @@ function EpisodeCard(props: { episode: WatchableEpisode }) {
       <Card.Title>{props.episode.name}</Card.Title>
       <View style={cardStyles.centerText}>
         <Card.FeaturedTitle>
-          {props.episode.airDateString} - {props.episode.rating}
+          <TextColorTheme text={`${props.episode.airDateString} - ${props.episode.rating}`} />
         </Card.FeaturedTitle>
       </View>
-      <Card.FeaturedSubtitle>{props.episode.story}</Card.FeaturedSubtitle>
+      <Card.FeaturedSubtitle><TextColorTheme text={props.episode.story} /></Card.FeaturedSubtitle>
     </Card>
   )
 }

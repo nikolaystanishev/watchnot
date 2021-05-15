@@ -1,5 +1,10 @@
 import React, { useEffect } from 'react';
-import { SafeAreaView, StatusBar, StyleSheet } from 'react-native';
+import {
+  SafeAreaView,
+  StatusBar,
+  StyleSheet,
+  useColorScheme
+} from 'react-native';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -24,12 +29,15 @@ import { ActorScreen } from './actor-screen';
 import { mainColor, secondaryColor } from './common-styles/colors';
 
 import { stopWarnings } from '../utils/warnings';
+import { ThemeProvider } from 'react-native-elements';
 
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 export function Navigation() {
+  const colorScheme = useColorScheme();
+
   const { seriesSubscriptionRepository, notificationRepository } = useDatabaseConnection();
 
   useEffect(() => {
@@ -42,16 +50,18 @@ export function Navigation() {
   useIntervalEffect(newSeriesEpisodes, 1000 * 60 * 10);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen name='TabNavigation' component={TabNavigation} options={{ headerShown: false }} />
-          <Stack.Screen name='Watchable' component={WatchableScreen} options={{ headerShown: false }} />
-          <Stack.Screen name='Actor' component={ActorScreen} options={{ headerShown: false }} />
-          <Stack.Screen name='Image' component={ImageScreen} options={{ headerShown: false }} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </SafeAreaView>
+    <ThemeProvider useDark={colorScheme === 'dark'}>
+      <SafeAreaView style={styles.container}>
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen name='TabNavigation' component={TabNavigation} options={{ headerShown: false }} />
+            <Stack.Screen name='Watchable' component={WatchableScreen} options={{ headerShown: false }} />
+            <Stack.Screen name='Actor' component={ActorScreen} options={{ headerShown: false }} />
+            <Stack.Screen name='Image' component={ImageScreen} options={{ headerShown: false }} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </SafeAreaView>
+    </ThemeProvider>
   );
 }
 

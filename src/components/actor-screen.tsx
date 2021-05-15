@@ -7,6 +7,8 @@ import { useNavigation } from '@react-navigation/native';
 import { getActor } from 'imdb-crawler-api';
 import { Actor } from 'imdb-crawler-api/src/actor';
 
+import { TextColorTheme } from './common/text-color-theme';
+
 import { LoaderAnimation } from './common/loader-animation';
 import { cardStyles } from './common-styles/styles';
 import { ScreenAnimatedLoader } from './common/loader-screen';
@@ -44,10 +46,10 @@ export function ActorScreen(props: { route: { params: { id: string } } }) {
           <Card.Divider />
           <Card.Title>{actor?.name}</Card.Title>
           <View style={cardStyles.centerText}>
-            <Card.FeaturedTitle>{actor?.birth}</Card.FeaturedTitle>
-            <Card.FeaturedTitle>{actor?.bornInfo}</Card.FeaturedTitle>
+            <Card.FeaturedTitle><TextColorTheme text={actor?.birth} /></Card.FeaturedTitle>
+            <Card.FeaturedTitle><TextColorTheme text={actor?.bornInfo} /></Card.FeaturedTitle>
           </View>
-          <Card.FeaturedSubtitle>{actor?.info}</Card.FeaturedSubtitle>
+          <Card.FeaturedSubtitle><TextColorTheme text={actor?.info} /></Card.FeaturedSubtitle>
         </Card>
       </ScrollView>
     </>
