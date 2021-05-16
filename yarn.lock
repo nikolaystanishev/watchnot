@@ -5163,6 +5163,11 @@ lottie-ios@^3.1.8:
   resolved "https://packages.botronsoft.com/repository/npm-public/lottie-ios/-/lottie-ios-3.2.2.tgz#c684bb9bdc91a970f15192506ee77b3c5c062ca6"
   integrity sha512-buYj/HbzoTeqiVy+Hpzfd2STdRW7RJnne+09z48nVvBYO+ioG5B5EvRb92pYOoRDNr0stQpfurzK1uFXW4gGCA==
 
+lottie-ios@^3.2.3:
+  version "3.2.3"
+  resolved "https://packages.botronsoft.com/repository/npm-public/lottie-ios/-/lottie-ios-3.2.3.tgz#d5a029ccce611603d178ea7ba725c1446f2310b4"
+  integrity sha512-mubYMN6+1HXa8z3EJKBvNBkl4UoVM4McjESeB2PgvRMSngmJtC5yUMRdhbbrIAn5Liu3hFGao/14s5hQIgtkRQ==
+
 lottie-react-native@3.5.0:
   version "3.5.0"
   resolved "https://packages.botronsoft.com/repository/npm-public/lottie-react-native/-/lottie-react-native-3.5.0.tgz#749fed964bdc9fabfae24ef81696f90f4d758f59"
