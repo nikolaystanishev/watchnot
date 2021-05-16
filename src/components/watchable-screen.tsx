@@ -202,13 +202,13 @@ function SeriesEpisodes(props: { watchable: Watchable }) {
       <FlatList
         horizontal
         data={createArrayFromSize(props.watchable.episodeCount['seasons'])}
-        renderItem={({ item }) => <NumberCard key={props.watchable.id + item} value={item} selector={selectSeason} />}
+        renderItem={({ item }) => <NumberCard key={props.watchable.id + "season" + item} value={item} selector={selectSeason} />}
         showsHorizontalScrollIndicator={false}
       />
       <FlatList
         horizontal
         data={createArrayFromSize(seasonEpisodes.length)}
-        renderItem={({ item }) => <NumberCard key={props.watchable.id + season + item} value={item} selector={selectEpisode} />}
+        renderItem={({ item }) => <NumberCard key={props.watchable.id + season + "episode" + item} value={item} selector={selectEpisode} />}
         showsHorizontalScrollIndicator={false}
       />
       {episode != -1 && <MemodEpisodeCard episode={seasonEpisodes[episode]} />}
