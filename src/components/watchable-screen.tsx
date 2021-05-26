@@ -98,12 +98,18 @@ export function WatchableScreen(props: { route: { params: { id: string } } }) {
           <Card.FeaturedSubtitle><TextColorTheme text={watchable?.story} /></Card.FeaturedSubtitle>
           {watchable && watchable.episodeCount.seasons && <SeriesEpisodes watchable={watchable} />}
           <Card.Divider />
+          <View style={cardStyles.centerText}>
+            <Card.FeaturedTitle><TextColorTheme text="Actors" /></Card.FeaturedTitle>
+          </View>
           <FlatList
             horizontal
             data={stars}
             renderItem={({ item }) => <MemodActorCard key={item.id} actor={item} />}
             showsHorizontalScrollIndicator={false}
           />
+          <View style={cardStyles.centerText}>
+            <Card.FeaturedTitle><TextColorTheme text="Similiar Titles" /></Card.FeaturedTitle>
+          </View>
           <FlatList
             horizontal
             data={watchable?.similarMovies}
@@ -199,12 +205,18 @@ function SeriesEpisodes(props: { watchable: Watchable }) {
   return (
     <>
       <Card.Divider />
+      <View style={cardStyles.centerText}>
+        <Card.FeaturedSubtitle><TextColorTheme text="Seasons" /></Card.FeaturedSubtitle>
+      </View>
       <FlatList
         horizontal
         data={createArrayFromSize(props.watchable.episodeCount['seasons'])}
         renderItem={({ item }) => <NumberCard key={props.watchable.id + "season" + item} value={item} selector={selectSeason} />}
         showsHorizontalScrollIndicator={false}
       />
+      <View style={cardStyles.centerText}>
+        <Card.FeaturedSubtitle><TextColorTheme text="Episodes" /></Card.FeaturedSubtitle>
+      </View>
       <FlatList
         horizontal
         data={createArrayFromSize(seasonEpisodes.length)}
@@ -271,7 +283,8 @@ const styles = StyleSheet.create({
   },
   actorCardItem: {
     width: 150,
-    height: 200
+    height: 200,
+    marginBottom: 10
   },
   watchableCardItemPoster: {
     width: 120,
