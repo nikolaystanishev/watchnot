@@ -22,7 +22,8 @@
         "UIBackgroundModes": [
           "fetch"
         ]
-      }
+      },
+      "bundleIdentifier": "com.watchnot"
     },
     "android": {
       "adaptiveIcon": {
@@ -35,7 +36,7 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "packagerOpts":{
+    "packagerOpts": {
       "minify": false
     }
   }
